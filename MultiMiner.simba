@@ -1,0 +1,90 @@
+type TRock = record
+  name:string;
+  Color, tol, mined:Integer;
+  hmod, smod:Extended;
+end;
+
+type DTMarea = record
+  anchors:T2DIntegerArray;
+  percent:Extended;
+end;
+
+type SPSarea = record
+  Bounds:TBox;
+end;
+
+type Area = record
+  DTM:DTMarea;
+  SPS:SPSArea;
+end;
+
+type Path = record
+  SPS_Path:TPointArray;
+  dtm_path:T2DIntegerArray;
+end;
+
+type Walk = record
+  ToBank, ToMine:Procedure();
+end;
+
+var
+  To_bank, To_Mine:path;
+  area_Bank:Area;
+
+procedure walk_dtmPath(Points:T2DIntegerArray);
+var
+  i, l, x, y:Integer;
+  FA:Extended;
+begin
+  for i := 0 to high(Points) do
+  begin
+    for l := 0 to high(Points[i]) do
+    begin
+      if FindDTMRotated(Points[i][l], x, y, MMX1, MMY1, MMX2, MMY2, 0, 360, 10.00, FA) then
+      begin
+        Mouse(x, y, 2, 2, Mouse_left);
+        wait(1200) + Random(1000);
+        if (FFlag) then
+        begin
+          Flag;
+          break;
+        end;
+      end;
+    end;
+  end;
+end;
+
+
+function dtm_inArea(area:DTMArea):boolean;
+var
+  i, l, x, y, found:Integer;
+  FA:Extended;
+begin
+  result := Point(-1, -1);
+  for i := 0 to high(area.anchors) do
+  if FindDTMRotated(Points[i], x, y, bs_MMX1, bs_MMY1, bs_MMX2, bs_MMY2, 0, 360, 8.00, FA) then
+    found := found + 1;
+  result := Area.percent >= (found/length(area.anchors) * 100);
+end;
+
+procedure Walk.ToBank;
+begin
+end;
+
+procedure loadPaths;
+begin
+  To_Bank.SPS_Path := [Point(5, 5)];
+  To_Bank.dtm_path[0][0] := DTMFromString('test');
+  To_Bank.dtm_path[0][1] := DTMFromString('test');
+  To_Bank.dtm_path[0][2] := DTMFromString('test');
+  area_bank.DTM.anchors[0][0] := DTMFromString('test');
+  area_bank.DTM.percent := 0.60;
+  area_bank.SPS.bounds := IntToBox(40, 40, 40, 40);
+end;
+
+begin
+
+
+
+end.
+
